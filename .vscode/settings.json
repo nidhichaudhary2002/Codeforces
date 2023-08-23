@@ -1,0 +1,16 @@
+{
+  "files.associations": {
+    ".env*": "dotenv",
+    "*.tcc": "cpp",
+    "deque": "cpp",
+    "list": "cpp",
+    "string": "cpp",
+    "unordered_map": "cpp",
+    "unordered_set": "cpp",
+    "vector": "cpp",
+    "ostream": "cpp",
+    "iostream": "cpp",
+    "new": "cpp",
+    "functional": "cpp"
+  }
+}
