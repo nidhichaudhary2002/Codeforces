@@ -1,16 +1,18 @@
 #include <iostream>
-#include <bits/stdc++.h>
+#include <cmath>
+
 using namespace std;
-int main()
-{
-int n,m,a;
 
-cin>>n>>m>>a;
+int main() {
+    long long n, m, a;
+    cin >> n >> m >> a;
+    long long horizontal_flagstones = ceil(double(n) / double(a));
+    long long vertical_flagstones = ceil(double(m) / double(a));
 
-for(int i=0;a*i<n;i++){
-    a=a*i;
-}
+    long long total_flagstones = horizontal_flagstones * vertical_flagstones;
 
+    // Print the result
+    cout << total_flagstones << endl;
 
- return 0;
+    return 0;
 }
