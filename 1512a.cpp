@@ -10,24 +10,30 @@ int main()
         int n;
         cin >> n;
         int *arr = new int[n];
+        unordered_map<int, int> mp;
 
         for (int i = 0; i < n; i++)
         {
             cin >> arr[i];
+            mp[arr[i]]++;
         }
 
-        int result = 0;
-
-        for (int i = 0; i < n; i++)
+        int findNum = INT_MIN;
+        for (auto it : mp)
         {
-            result ^= arr[i];
-        }
-
-        for (int i = 0; i < n; i++)
-        {
-            if (arr[i] == result)
+            if (it.second == 1)
             {
-                cout << i;  
+                findNum = it.first;
+                break;
+            }
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            if (findNum == arr[i])
+            {
+                cout << i +1<< endl;
+                break;
             }
         }
     }
