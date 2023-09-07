@@ -1,55 +1,88 @@
-class TreeNode
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+struct ListNode
 {
-public:
-    int value;
-    TreeNode *left;
-    TreeNode *right;
-
-    TreeNode(int val) : value(val), left(nullptr), right(nullptr) {}
-
-    void insert(int val)
-    {
-        if (val <= value)
-        {
-            if (left == nullptr)
-            {
-                left = new TreeNode(val);
-            }
-            else
-            {
-                left->insert(val);
-            }
-        }
-        else
-        {
-            if (right == nullptr)
-            {
-                right = new TreeNode(val);
-            }
-            else
-            {
-                right->insert(val);
-            }
-        }
-    }
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
-
-int main()
+ListNode *reverse(ListNode *node)
 {
-    TreeNode *root = new TreeNode(5);
-    root->insert(3);
-    root->insert(8);
-    root->insert(2);
-    root->insert(4);
-    root->insert(7);
-    root->insert(9);
+    if (node == NULL)
+    {
+        return NULL;
+    }
+    if (node->next == NULL)
+    {
+        head = node;
+        return node;
+    }
+    ListNode *node1 = reverse(node->next);
+    node1->next = node;
+    node->next = NULL;
+    return node;
+}
 
-    // Now the tree should look like:
-    //       5
-    //     /   \
-    //    3     8
-    //   / \   / \
-    //  2   4 7   9
+ListNode *reverseBetween(ListNode *head, int left, int right)
+{
 
-    return 0;
+    // if (head == NULL)
+    // {
+    //     return NULL;
+    // }
+
+    // int i = 0;
+    // ListNode *Currleft = NULL;
+    // ListNode *Prevleft = NULL;
+
+    // while (i != left)
+    // {
+    //     if (i == 0)
+    //     {
+    //         Currleft = head;
+    //     }
+    //     else
+    //     {
+    //         Prevleft = Currleft;
+    //         Currleft = Currleft->next;
+    //     }
+    //     i++;
+    // }
+
+    // int j = 0;
+    // ListNode *currRight = NULL;
+    // ListNode *nextRight = NULL;
+
+    // while (j != right)
+    // {
+    //     if (j == 0)
+    //     {
+    //         currRight = head;
+    //     }
+    //     else
+    //     {
+    //         currRight = currRight->next;
+    //     }
+    //     j++;
+    // }
+
+    // currRight->next = nextRight;
+    // currRight->next = NULL;
+
+    // ListNode *NewHead = reverse(Currleft);
+    // Prevleft->next = NewHead;
+
+    // ListNode *temp = NewHead;
+
+    // while (temp->next != NULL)
+    // {
+    //     temp = temp->next;
+    // }
+    // temp->next = nextRight;
+
+    // return head;
 }
