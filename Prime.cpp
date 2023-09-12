@@ -1,62 +1,79 @@
-#include <iostream>
-#include <vector>
-#include <cmath>
+#include <bits/stdc++.h>
+#define orz 0
+#define ll long long
+#define MAXN 1000005
+#define MAXM 200005
+#define MOD 998244353
 using namespace std;
 
-bool is_prime(int n)
+inline int read()
 {
-    if (n <= 1)
+    int f = 1, k = 0;
+    char c = getchar();
+    while (c < '0' || c > '9')
     {
-        return false;
+        if (c == '-')
+            f = 0;
+        c = getchar();
     }
-    if (n <= 3)
-    {
-        return true;
-    }
-    if (n % 2 == 0 || n % 3 == 0)
-    {
-        return false;
-    }
-    int i = 5;
-    while (i * i <= n)
-    {
-        if (n % i == 0 || n % (i + 2) == 0)
-        {
-            return false;
-        }
-        i += 6;
-    }
-    return true;
+    while (c >= '0' && c <= '9')
+        k = k * 10 + c - '0', c = getchar();
+    if (f)
+        return k;
+    return -k;
 }
-
-vector<bool> prime_array(int n)
+int t, n, ans;
+int gcd(int a, int b)
 {
-    vector<bool> prime_bools(n + 1, true);
-    prime_bools[0] = prime_bools[1] = false;
-
-    for (int i = 2; i <= std::sqrt(n); ++i)
+    if (b == 0)
     {
-        if (prime_bools[i])
-        {
-            for (int j = i * i; j <= n; j += i)
-            {
-                prime_bools[j] = false;
-            }
-        }
+        return a;
     }
-
-    return prime_bools;
+    return gcd(b, a % b);
 }
-
 int main()
 {
-    int n;
-    cout << "Enter the size of the array: ";
-    cin >> n;
-
-    vector<bool> prime_bools = prime_array(n);
-
-    cout << "Array with prime flags:" << std::endl;
-
-    return 0;
+    t = read();
+    while (t--)
+    {
+        int l = read(), r = read();
+        if (l == r)
+        {
+            if (l % 2 == 1)
+            {
+                bool f = 0;
+                for (int i = 3; i <= sqrt(l); i++)
+                {
+                    if (l % i != 0)
+                        continue;
+                    printf("%d %d\n", i, l - i);
+                    f = 1;
+                    break;
+                }
+                if (!f)
+                {
+                    printf("-1\n");
+                }
+                continue;
+            }
+            if (l == 2)
+            {
+                printf("-1\n");
+                continue;
+            }
+            printf("%d %d\n", l / 2, l / 2);
+        }
+        else
+        {
+            if (r % 2 == 1)
+                r--;
+            if (r == 2)
+            {
+                printf("-1\n");
+                continue;
+            }
+            printf("%d %d\n", r / 2, r / 2);
+        }
+    }
+    return orz;
 }

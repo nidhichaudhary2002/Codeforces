@@ -1,63 +1,42 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-long long max(long long a, long long b){
-    if(a>b){
-        return a;
-    }
-    return b;
-}
-
-long long MaxTotalValue(int n, vector<int> a, vector<int> v, int x)
+class Solution
 {
-
-    long long  maxTotalValue = 0;
-
-    for (int i = 0; i < n; ++i)
+public:
+    void combination(vector<int> &nums, int target, int sum, int &ans, int idx)
     {
-        int sumAge = 0, sumValue = 0;
-        for (int j = i; j < n; ++j)
+        if (sum == target)
         {
-            sumAge += a[j];
-            sumValue += v[j];
-            int avgAge = sumAge / (j - i + 1);
-            if (avgAge == x)
-            {
-                maxTotalValue = max(maxTotalValue, sumValue);
-            }
+            ans++;
+            return;
+        }
+        if (idx == nums.size())
+        {
+            return;
+        }
+
+        if (target <= nums[idx])
+        {
+            combination(nums, target, sum + nums[idx], ans, idx + 1);
+        }
+
+        combination(nums, target, sum, ans, idx + 1);
+
+        if (target <= nums[idx])
+        {
+            combination(nums, target, sum + nums[idx], ans, idx);
         }
     }
-    return maxTotalValue;
-}
 
-int main()
-{
-    int t;
-    cin >> t;
-
-    while (t--)
+    int combinationSum4(vector<int> &nums, int target)
     {
-        int n;
-        cin >> n;
 
-        vector<int> a(n), v(n);
-        for (int i = 0; i < n; ++i)
-        {
-            cin >> a[i];
-        }
-        for (int i = 0; i < n; ++i)
-        {
-            cin >> v[i];
-        }
-
-        int x;
-        cin >> x;
-
-        cout << MaxTotalValue(n, a, v, x) << endl;
+        int ans = 0;
+        combination(nums, target, 0, ans, 0);
+        return ans;
     }
-
-    return 0;
-}
+};

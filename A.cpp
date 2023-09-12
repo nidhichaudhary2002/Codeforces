@@ -1,61 +1,53 @@
 #include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-bool isPrime(int n)
+void findTwoBases(int &a, int &b, int p)
 {
-    if (n <= 1)
+
+    unordered_map<int, int> mp;
+
+    for (int i = 1; i <= p; i++)
     {
-        return false;
+        mp[i % p] = i;
     }
 
-    for (int i = 2; i * i <= n; i++)
+    for (auto it : mp)
     {
-        if (n % i == 0)
-        {
-            return false;
-        }
+        cout << it.first << " " << it.second << endl;
     }
 
-    return true;
-}
-
-void findTwoBases(int p)
-{
-    for (int a = 2; a < p; a++)
+    for (int i = 1; i < p; i++)
     {
-        if (p % a == 0)
+        if (mp.find(p % i) != mp.end())
         {
-            for (int b = a + 1; b <= p; b++)
-            {
-                if (p % b == 0 && a != b)
-                {
-                    cout << a << " " << b << endl;
-                    return;
-                }
-            }
+            a = i;
+            b = mp[p % i];
+            break;
         }
     }
 }
 
 int main()
 {
-    int t;
-    cin >> t;
+    // int t;
+    // cin >> t;
 
-    while (t--)
+    // while (t--)
+    // {
+    int p, a = -1, b = -1;
+    cin >> p;
+
+    findTwoBases(a, b, p);
+
+    if (a == -1 && b == -1)
     {
-        int p;
-        cin >> p;
-
-        if (isPrime(p))
-        {
-            findTwoBases(p);
-        }
-        else
-        {
-            cout << "-1" << endl;
-        }
+        cout << -1;
     }
-
+    else
+    {
+        cout << max(a, b) << " " << min(a, b);
+    }
+    // }
     return 0;
 }
