@@ -1,29 +1,74 @@
+#include <iostream>
 #include <bits/stdc++.h>
- 
-using i64 = long long;
- 
-void solve() {
-    int n, k;
-    i64 x;
-    std::cin >> n >> k >> x;
-    
-    if (x >= 1LL * k * (k + 1) / 2 && x <= 1LL * k * (n + n - k + 1) / 2) {
-        std::cout << "YES\n";
-    } else {
-        std::cout << "NO\n";
+using namespace std;
+
+void printVector(vector<int> arr)
+{
+    for (int i = 0; i < arr.size(); i++)
+    {
+        cout << arr[i] << " ";
     }
+    cout << endl;
 }
- 
-int main() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    
+
+void solve()
+{
+
+    vector<int> arr;
+    int k, n;
+    cin >> n >> k;
+
+    for (int i = k; i <= (k + n - 1); i++)
+    {
+        arr.push_back(i);
+        // cout << i << ' ';
+    }
+    int sz = arr.size();
+    vector<int> front(sz), back(sz);
+
+    for (int i = 0; i < sz; i++)
+    {
+        if (i == 0)
+        {
+            front[i] = arr[i];
+            continue;
+        }
+        front[i] = arr[i] + front[i - 1];
+    }
+    for (int i = sz - 1; i >= 0; i--)
+    {
+        if (i == sz - 1)
+        {
+            back[i] = arr[i];
+            continue;
+        }
+        back[i] = arr[i] + back[i + 1];
+    }
+
+    int ans = INT_MAX;
+
+    // printVector(front);
+    // printVector(back);
+
+    // cout << sz << " ";
+    for (int i = 1; i < sz - 1; i++)
+    {
+        // cout << "Reached" << " ";
+        // cout << abs(front[i] - back[i]) << " ";
+        ans = min(ans, abs(front[i] - back[i]));
+    }
+    cout << ans << endl;
+}
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(0);
     int t;
-    std::cin >> t;
-    
-    while (t--) {
+    cin >> t;
+
+    while (t--)
+    {
         solve();
     }
-    
-    return 0;
 }

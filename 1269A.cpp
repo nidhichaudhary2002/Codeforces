@@ -1,46 +1,56 @@
 #include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
 
-bool isComposite(int num)
-{
-    if (num <= 1)
-    {
-        return false;
-    }
-    for (int i = 2; i * i <= num; ++i)
-    {
-        if (num % i == 0)
-        {
-            return true;
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int testCases;
+    cin >> testCases;
+    
+    while (testCases--) {
+        int numRows, numStrings;
+        cin >> numRows >> numStrings;
+
+        vector<int> zeroCount(numRows, 0);
+        vector<int> oneCount(numRows, 0);
+        vector<int> questionCount(numRows, 0);
+
+        for (int i = 0; i < numStrings; ++i) {
+            string line;
+            cin >> line;
+            for (int j = 0; j < numRows; ++j) {
+                if (line[j] == '0') {
+                    zeroCount[j]++;
+                } else if (line[j] == '1') {
+                    oneCount[j]++;
+                } else if (line[j] == '?') {
+                    questionCount[j]++;
+                }
+            }
         }
-    }
-    return false;
-}
 
-pair<int, int> findCompositeIntegers(int n)
-{
+        long long result = 0;
+        for (int i = 0; i < numRows; ++i) {
+            int zeros = zeroCount[i];
+            int ones = oneCount[i];
+            int questions = questionCount[i];
 
-    for (int i = 1; i < 1000000000; i++)
-    {
-        int a = i;
-        int b = n + a;
-        if (isComposite(a) && isComposite(b))
-        {
-            return make_pair(b, a);
+            while (questions-- > 0) {
+                if (zeros <= ones) {
+                    zeros++;
+                } else {
+                    ones++;
+                }
+            }
+
+            result += static_cast<long long>(zeros) * ones;
         }
+
+        cout << result << endl;
     }
-
-    return {-1, -1};
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-
-    pair<int, int> result = findCompositeIntegers(n);
-
-    cout << result.first << " " << result.second << endl;
 
     return 0;
 }

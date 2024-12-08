@@ -2,102 +2,86 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int source)
+class Solution
 {
-    unordered_map<int, list<pair<int, int>>> adj;
-
-    for (int i = 0; i < vec.size(); i++)
+public:
+    int dfs(unordered_map<int, unordered_set<int>> adjUn,
+            unordered_map<int, unordered_set<int>> adjD, int curr,
+            vector<bool> vis)
     {
-        for (int j = 0; j < vec[i].size(); j++)
+        vis[curr] = true;
+
+        int cnt = 0;
+        for (auto it : adjUn[curr])
         {
-            int w = vec[i][j];
-            adj[i].push_back(make_pair(j, w));
-            adj[j].push_back(make_pair(i, w));
-        }
-    }
-
-    // creation of distance array with infinite value initially
-    vector<int> dist(vertices);
-    for (int i = 0; i < vertices; i++)
-    {
-        dist[i] = INT16_MAX;
-    }
-    // creation of set on basis (distance,node)
-    set<pair<int, int>> st;
-    // initialise distance and set with source code
-    dist[source] = 0;
-    st.insert(make_pair(0, source));
-
-    while (!st.empty())
-    {
-        auto top = *(st.begin());
-        int nodeDistance = top.first;
-        int topNode = top.second;
-
-        //
-        st.erase(st.begin());
-        for (auto neighbour : adj[topNode])
-        {
-            if (nodeDistance + neighbour.second < dist[neighbour.first])
+            if (!vis[it])
             {
-                auto record = st.find(make_pair(dist[neighbour.first], neighbour.first));
-                if (record != st.end())
+                if (!adjD[curr].empty() || adjD[curr].find(it) != adjD[curr].end())
                 {
-                    st.erase(record);
+                    cnt++;
                 }
-                dist[neighbour.first] = nodeDistance + neighbour.second;
-                st.insert(make_pair(dist[neighbour.first], neighbour.first));
+                cnt += dfs(adjUn, adjD, it, vis);
+            }
+        }
+        return cnt;
+    }
+
+    void bfs(unordered_map<int, unordered_set<int>> adjUn,
+             unordered_map<int, unordered_set<int>> adjD, vector<int> &result,
+             vector<bool> vis, queue<pair<int, int>> q)
+    {
+        while (!q.empty())
+        {
+            int size = q.size();
+            while (size--)
+            {
+                int node = q.front().first;
+                int parent = q.front().second;
+                q.pop();
+
+                if (result[node] == -1)
+                {
+                    if (adjD[node].find(parent) != adjD[node].end())
+                    {
+                        result[node] = result[parent] - 1;
+                    }
+                    else
+                    {
+                        result[node] = result[parent] + 1;
+                    }
+                    for (auto it : adjUn[node])
+                    {
+                        q.push({it, node});
+                    }
+                }
             }
         }
     }
-    return dist;
-}
 
-int main()
-{
-    int t;
-    cin >> t;
-    while (t--)
+    vector<int> minEdgeReversals(int n, vector<vector<int>> &edges)
     {
+        unordered_map<int, unordered_set<int>> adjUn;
+        unordered_map<int, unordered_set<int>> adjD;
 
-        int tot, k, a, b;
-
-        cin >> tot >> k >> a >> b;
-
-        pair<int, int> *arr = new pair<int, int>[tot];
-
-        for (int i = 0; i < tot; i++)
+        for (int i = 0; i < edges.size(); i++)
         {
-            cin >> arr[i].first >> arr[i].second;
+            int a = edges[i][0];
+            int b = edges[i][1];
+            adjUn[a].insert(b);
+            adjUn[b].insert(a);
+            adjD[a].insert(b);
+        }
+        vector<int> result(n, -1);
+        vector<bool> vis;
+        result[0] = dfs(adjUn, adjD, 0, vis);
+        queue<pair<int, int>> q;
+        for (auto it : adjUn[0])
+        {
+            q.push({it, 0});
         }
 
-        vector<vector<int>> adjlist(tot, vector<int>(tot, 0));
-
-        for (int i = 0; i < tot; i++)
-        {
-            for (int j = 0; j < tot; j++)
-            {
-                if (i == j)
-                {
-                    continue;
-                }
-                if (i < k && j < k)
-                {
-                    continue;
-                }
-                else
-                {
-                    adjlist[i][j] = abs(arr[i].first - arr[j].first) + abs(arr[i].second - arr[j].second);
-                    // adjlist[j][i] = adjlist[i][j];
-                }
-            }
-        }
-
-        int edges = (tot * (tot - 1)) / 2;
-
-        vector<int> dist = dijkstra(adjlist, tot, edges, a);
-
-        cout << "Ans : " << dist[b] / 2 << endl;
+        bfs(adjUn, adjD, result, vis, q);
+        return result;
     }
-    return 0;
-}
+};
+
